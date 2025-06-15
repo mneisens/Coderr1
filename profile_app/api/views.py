@@ -65,10 +65,12 @@ from .serializers import ProfileDetailSerializer
 @authentication_classes([])  # disable DRF auth, we parse token manually
 @permission_classes([AllowAny])                  # jede Anfrage darf rein
 def profile_view(request, pk=None):
-    """
-    Liefert IMMER ein JSON-Array zurück:
-    - GET → [] oder [ {...Profil...} ] (nie 401/404/500)
-    - PATCH → 401 ohne gültigen Token, ansonsten [ {...aktualisiertes Profil...} ]
+    """Return or update the authenticated user's profile.
+
+    * ``GET`` without valid token → empty list ``[]``
+    * ``GET`` with token → profile object
+    * ``PATCH`` without token → 401
+    * ``PATCH`` with token → updated profile object
     """
     # 1) Manuelles Token-Parsing
     auth = request.META.get('HTTP_AUTHORIZATION', '')
@@ -114,9 +116,7 @@ def profile_view(request, pk=None):
         else:
             serializer = ProfileDetailSerializer(profile)
 
-        data = [serializer.data]
-
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     except Exception:
         # Fängt alle unerwarteten Fehler ab und gibt für GET ein leeres Array zurück
