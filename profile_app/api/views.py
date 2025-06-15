@@ -53,7 +53,7 @@ from rest_framework import status, generics, mixins
 
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import BaseAuthentication
+# from rest_framework.authentication import BaseAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -63,7 +63,8 @@ from ..models import Profile
 from .serializers import ProfileDetailSerializer
 
 @api_view(['GET', 'PATCH'])
-@authentication_classes([BaseAuthentication])    # keine DRF-Auth, wir parsen manuell
+# @authentication_classes([BaseAuthentication])    # keine DRF-Auth, wir parsen manuell
+@authentication_classes([]) 
 @permission_classes([AllowAny])                  # jede Anfrage darf rein
 def profile_view(request, pk=None):
     """
