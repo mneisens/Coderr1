@@ -53,7 +53,10 @@ from rest_framework import status, generics, mixins
 
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+<<<<<<< HEAD
 # from rest_framework.authentication import BaseAuthentication
+=======
+>>>>>>> origin/codex/erstelle-backend-für-das-frontend-mit-den-angegebenen-endpun
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -63,14 +66,20 @@ from ..models import Profile
 from .serializers import ProfileDetailSerializer
 
 @api_view(['GET', 'PATCH'])
+<<<<<<< HEAD
 # @authentication_classes([BaseAuthentication])    # keine DRF-Auth, wir parsen manuell
 @authentication_classes([]) 
+=======
+@authentication_classes([])  # disable DRF auth, we parse token manually
+>>>>>>> origin/codex/erstelle-backend-für-das-frontend-mit-den-angegebenen-endpun
 @permission_classes([AllowAny])                  # jede Anfrage darf rein
 def profile_view(request, pk=None):
-    """
-    Liefert IMMER ein JSON-Array zurück:
-    - GET → [] oder [ {...Profil...} ] (nie 401/404/500)
-    - PATCH → 401 ohne gültigen Token, ansonsten [ {...aktualisiertes Profil...} ]
+    """Return or update the authenticated user's profile.
+
+    * ``GET`` without valid token → empty list ``[]``
+    * ``GET`` with token → profile object
+    * ``PATCH`` without token → 401
+    * ``PATCH`` with token → updated profile object
     """
     # 1) Manuelles Token-Parsing
     auth = request.META.get('HTTP_AUTHORIZATION', '')
@@ -116,9 +125,7 @@ def profile_view(request, pk=None):
         else:
             serializer = ProfileDetailSerializer(profile)
 
-        data = [serializer.data]
-
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     except Exception:
         # Fängt alle unerwarteten Fehler ab und gibt für GET ein leeres Array zurück
