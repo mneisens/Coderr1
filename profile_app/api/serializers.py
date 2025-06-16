@@ -63,3 +63,4 @@ class CustomerProfileListSerializer(serializers.ModelSerializer):
             'uploaded_at',  
             'type',
         ]
+

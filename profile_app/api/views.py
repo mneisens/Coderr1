@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
-from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from ..models import Profile
 from .serializers import (
@@ -8,70 +7,16 @@ from .serializers import (
     BusinessProfileListSerializer,
     CustomerProfileListSerializer
 )
-from .permissions import IsOwnerOrReadOnly
-from rest_framework import status, generics, mixins
 
-# User = get_user_model()
-
-# class ProfileDetailAPI(generics.RetrieveUpdateAPIView):
-#     """
-#     GET /api/profile/<any>/  liefert immer ein Array mit genau einem Profil-Dict.
-#     PATCH /api/profile/<any>/ updated und liefert auch ein Array.
-#     """
-#     serializer_class   = ProfileDetailSerializer
-#     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-#     lookup_field       = 'user'         # wenn du per user__pk suchst
-#     lookup_url_kwarg   = 'pk'
-
-#     def get_object(self):
-#         # Immer das Profil des eingeloggten Users, neu angelegt falls nötig
-#         profile, _ = Profile.objects.get_or_create(
-#             user=self.request.user,
-#             defaults={
-#                 'type': 'customer',
-#                 'file': None,
-#                 'location': '',
-#                 'tel': '',
-#                 'description': '',
-#                 'working_hours': '',
-#             }
-#         )
-#         return profile
-
-#     def get(self, request, *args, **kwargs):
-#         # Hol das Profil, serialisiere es und gib es als 1-Element-Array zurück
-#         inst = self.get_object()
-#         data = self.get_serializer(inst).data
-#         return Response([data], status=status.HTTP_200_OK)
-
-#     def patch(self, request, *args, **kwargs):
-#         inst = self.get_object()
-#         serializer = self.get_serializer(inst, data=request.data, partial=True)
-#         serializer.is_valid(raise_exception=True)
-#         self.perform_update(serializer)
-#         return Response([serializer.data], status=status.HTTP_200_OK)
-
-
+from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-<<<<<<< HEAD
-# from rest_framework.authentication import BaseAuthentication
-=======
->>>>>>> origin/codex/erstelle-backend-für-das-frontend-mit-den-angegebenen-endpun
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ..models import Profile
-from .serializers import ProfileDetailSerializer
 
 @api_view(['GET', 'PATCH'])
-<<<<<<< HEAD
-# @authentication_classes([BaseAuthentication])    # keine DRF-Auth, wir parsen manuell
-@authentication_classes([]) 
-=======
 @authentication_classes([])  # disable DRF auth, we parse token manually
->>>>>>> origin/codex/erstelle-backend-für-das-frontend-mit-den-angegebenen-endpun
 @permission_classes([AllowAny])                  # jede Anfrage darf rein
 def profile_view(request, pk=None):
     """Return or update the authenticated user's profile.
